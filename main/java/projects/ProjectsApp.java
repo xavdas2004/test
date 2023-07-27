@@ -14,7 +14,7 @@ import projects.service.ProjectService;
 public class ProjectsApp {
 	private ProjectService projectService;
 	private List<String> operations = List.of("1) Add a project", "2) List projects", "3) Select a project",
-			"4) Update project details");
+			"4) Update project details", "5) Delete a project");
 	private Scanner scanner = new Scanner(System.in);
 
 	Project curProject;
@@ -49,6 +49,10 @@ public class ProjectsApp {
 					break;
 				case 4:
 					updateProjectDetails();
+					break;
+				case 5:
+					deleteProject();
+					break;
 				default:
 					System.out.println("\n" + selection + " is not a valid selection. Try again.");
 					break;
@@ -60,6 +64,45 @@ public class ProjectsApp {
 
 		}
 	}
+
+	private void deleteProject() {
+
+		listProjects();
+		
+		Integer projectId = getIntInput("Enter the ID of the project you want deleted");
+		
+		if(Objects.nonNull(projectId)){
+		projectService.deleteProject(projectId);
+		System.out.println("Project " + projectId + " was deleted successfully.");
+		if(Objects.nonNull(curProject) && curProject.getProjectId().equals(projectId)) {
+			curProject = null;
+		}
+		}
+	}
+		
+		/*System.out.println("Enter the ID of the project you want deleted: ");
+		Scanner scanner = new Scanner(System.in);
+		int deleteId = scanner.nextInt();
+		scanner.nextLine();
+		try {
+		if (curProject != null && curProject.getProjectId() == deleteId) {
+			curProject = null;
+		}
+		boolean deleted = projectService.deleteProject(deleteId);
+
+		if (deleted) {
+			System.out.println("Project " + deleteId + " was deleted! :>");
+		}
+
+		else {
+			System.out.println("Failed to delete project " + deleteId + ". :<");
+		}
+		}catch(Exception e) {
+		System.out.println("An error occurred while deleting the project: " + e.getMessage());
+        e.printStackTrace();
+		}
+		}
+		 */
 
 	private void updateProjectDetails() {
 		// TODO Auto-generated method stub
